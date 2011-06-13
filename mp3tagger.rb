@@ -23,7 +23,6 @@ require 'bundler/setup'
 
 require 'highline/import'
 require 'mp3info'
-require File.expand_path(File.dirname(__FILE__) + '/genres')
 
 module Mp3Tagger
   def self.run
@@ -57,7 +56,7 @@ private
       q.validate = /^\d{4}$/
       q.responses[:not_valid] = 'A 4 digit year must be entered'
     end
-    @common_tags[:genre] = ask('Genre? ', GENRES) { |q| q.default = @common_tags[:genre] }
+    @common_tags[:genre] = ask('Genre? ', Mp3Info::GENRES) { |q| q.default = @common_tags[:genre] }
   end
 
   def self.ask_for_track_info
@@ -95,13 +94,13 @@ private
       mp3 = Mp3Info.open(info[:file])
       mp3.removetag1
       mp3.removetag2
-      mp3.tag.artist = @common_tags[:artist]
-      mp3.tag.album = @common_tags[:album]
-      mp3.tag.year = @common_tags[:year]
-      mp3.tag.genre_s = @common_tags[:genre]
-      mp3.tag.year = @common_tags[:year]
-      mp3.tag.title = info[:title]
-      mp3.tag.tracknum = info[:tracknum]
+      mp3.flush
+      mp3.tag2.TPE1 = @common_tags[:artist]
+      mp3.tag2.TALB = @common_tags[:album]
+      mp3.tag2.TYER = @common_tags[:year]
+      mp3.tag2.TCON = @common_tags[:genre]
+      mp3.tag2.TIT2 = info[:title]
+      mp3.tag2.TRCK = info[:tracknum].to_i
       mp3.close
 
       File.rename(info[:file], new_filename(info))
@@ -119,6 +118,8 @@ private
 
   def self.pad_by
     @pad_by ||= @track_info.size.to_s.split(//).size
+    @pad_by = 2 if @pad_by < 2
+    @pad_by
   end
 
 end
