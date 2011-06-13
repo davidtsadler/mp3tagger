@@ -8,7 +8,7 @@ Performs the following.
 * For each file prompt for the track number and title. Displays sensible defaults if possible.
 * Clear existing tags.
 * Save new id3v2 tags.
-* Rename existing files using the format <track>-<title>.mp3
+* Rename existing files using the format &lt;track&gt;-&lt;title&gt;.mp3
 
 ## Dependencies
 
