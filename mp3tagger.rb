@@ -63,7 +63,7 @@ private
     mp3files.each_with_index do |file, index|
       @track_info[index] ||= {}
       @track_info[index][:file] = file
-      say "Info for <%= color('#{file}', :green) %>"
+      say "Info for <%= color('#{file.gsub("'","\\\\'")}', :green) %>"
       @track_info[index][:tracknum] = ask('Track Number? ') do |q| 
         q.validate = /^\d+$/
         q.default = @track_info[index][:tracknum] ? @track_info[index][:tracknum] : (index + 1).to_s
@@ -78,18 +78,18 @@ private
   end
 
   def self.display_summary
-    say "Artist: <%= color('#{@common_tags[:artist]}', :blue) %>"
-    say "Album : <%= color('#{@common_tags[:album]}', :blue) %>"
-    say "Year  : <%= color('#{@common_tags[:year]}', :blue) %>"
-    say "Genre : <%= color('#{@common_tags[:genre]}', :blue) %>"
+    say "Artist: <%= color('#{@common_tags[:artist].gsub("'","\\\\'")}', :blue) %>"
+    say "Album : <%= color('#{@common_tags[:album].gsub("'","\\\\'")}', :blue) %>"
+    say "Year  : <%= color('#{@common_tags[:year].gsub("'","\\\\'")}', :blue) %>"
+    say "Genre : <%= color('#{@common_tags[:genre].gsub("'","\\\\'")}', :blue) %>"
     @track_info.each do |info|
-      say "<%= color('#{info[:file]}', :green) %> -> <%= color('#{new_filename(info)}', :red) %>"
+      say "<%= color('#{info[:file].gsub("'","\\\\'")}', :green) %> -> <%= color('#{new_filename(info).gsub("'","\\\\'")}', :red) %>"
     end
   end
 
   def self.tag_files
     @track_info.each do |info|
-      say "Tagging <%= color('#{info[:file]}', :green) %>"
+      say "Tagging <%= color('#{info[:file].gsub("'","\\\\'")}', :green) %>"
 
       mp3 = Mp3Info.open(info[:file])
       mp3.removetag1
