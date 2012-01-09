@@ -202,7 +202,7 @@ private
   end
 
   def self.new_filename(info)
-    padded_track_number = "%0#{pad_by(info[:album])}d" % info[:tracknum]
+    padded_track_number = "%0#{pad_by(info[:album])}d" % info[:tracknum].to_i
     "#{padded_track_number}-#{info[:title]}.mp3"
   end
 
